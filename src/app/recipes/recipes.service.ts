@@ -1,21 +1,43 @@
 import { EventEmitter, Injectable } from '@angular/core';
 
 import { Recipe } from '../models/Recipe';
+import { Ingredient } from '../models/Ingredient';
+import { ShoppingListService } from '../shopping-list/shopping-list.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RecipesService {
   private _recipes: Recipe[] = [
-    new Recipe('Recipe 1', 'This is recipe 1.', 'https://cdn.pixabay.com/photo/2016/06/08/00/03/pizza-1442946_1280.jpg'),
-    new Recipe('Recipe 2', 'This is recipe 2.', 'https://cdn.pixabay.com/photo/2016/06/08/00/03/pizza-1442946_1280.jpg')
+    new Recipe(
+      'Recipe 1',
+      'This is recipe 1.',
+      'https://upload.wikimedia.org/wikipedia/commons/7/72/Schnitzel.JPG',
+      [
+        new Ingredient('Meat', 1),
+        new Ingredient('French fries', 20),
+      ]
+    ),
+    new Recipe(
+      'Recipe 2',
+      'This is recipe 2.',
+      'https://upload.wikimedia.org/wikipedia/commons/b/be/Burger_King_Angus_Bacon_%26_Cheese_Steak_Burger.jpg',
+      [
+        new Ingredient('Buns', 2),
+        new Ingredient('Meat', 1)
+      ]
+    )
   ];
 
   recipeSelectedEventEmitter = new EventEmitter<Recipe>();
 
-  constructor() {}
+  constructor(private _shoppingListService: ShoppingListService) {}
 
   get recipes() {
     return this._recipes.slice();
+  }
+
+  addIngredientsToShoppingList(ingredients: Ingredient[]) {
+    this._shoppingListService.addIngredients(ingredients);
   }
 }
